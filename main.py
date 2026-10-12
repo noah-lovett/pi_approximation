@@ -4,7 +4,7 @@ by noah lovett
 started 10/07/26
 """
 import numpy as np
-
+import scipy
 rng = np.random.default_rng()
 import matplotlib.pyplot as plt
 
@@ -16,6 +16,7 @@ Asquare = 2 * 2
 areas = []
 steps = []
 errors = []
+
 for i in range(step):
     x = 2 * rng.random() - 1
     y = 2 * rng.random() - 1
@@ -27,16 +28,28 @@ for i in range(step):
     areas.append(Acircle)
     errors.append(np.absolute((Acircle - np.pi)/np.pi))
 
+
+bf_line = scipy.stats.linregress(np.log10(steps), np.log10(errors))
+
+def extrapolate_error(limit):
+    return (limit - bf_line.intercept) / bf_line.slope
+
+print(str(Acircle))
+print("Steps needed to get error of 10e-10: 10e" + str(extrapolate_error(-10)))
+
 fig, ax = plt.subplots()
 ax.plot(steps, areas)
 ax.set_xlabel('Step #')
 ax.set_ylabel('Pi Approximation')
 
-print(str(Acircle))
-
 fig, ax2 = plt.subplots()
-ax2.plot(np.log10(steps), errors)
-ax2.set_xlabel('Step #')
+ax2.plot(np.log10(steps), errors, color='red', label='Monte Carlo Results')
+ax2.set_xlabel('Step # (log base 10)')
 ax2.set_ylabel('Error')
-plt.show()
 
+fig, ax3 = plt.subplots()
+ax3.plot(np.log10(steps), np.log10(errors), color='red', label='Monte Carlo Results')
+ax3.plot(np.log10(steps), bf_line.slope * np.log10(steps) + bf_line.intercept, color='blue', label='Best Fit Line')
+ax3.set_xlabel('Step # (log base 10)')
+ax3.set_ylabel('Error (log base 10)')
+plt.show()

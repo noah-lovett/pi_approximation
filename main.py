@@ -35,7 +35,8 @@ def extrapolate_error(limit):
     return (limit - bf_line.intercept) / bf_line.slope
 
 print(str(Acircle))
-print("Steps needed to get error of 10e-10: 10e" + str(extrapolate_error(-10)))
+for i in range (1, 11):
+    print("Steps needed to get error of 10e-" + str(i) +": 10e" + str(extrapolate_error(-1*i)))
 
 fig, ax = plt.subplots()
 ax.plot(steps, areas)

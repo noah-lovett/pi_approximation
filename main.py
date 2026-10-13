@@ -38,6 +38,12 @@ print(str(Acircle))
 for i in range (1, 11):
     print("Steps needed to get error of 10e-" + str(i) +": 10e" + str(extrapolate_error(-1*i)))
 
+
+#egor's suggestion for error best fit line
+""" error ~ 1/sqrt(step)  OR  error ~ step^(-0.5)
+when you take log of both sides, the equation becomes linearized:
+  log(error) = constant - 0.5*log(step)"""
+
 fig, ax = plt.subplots()
 ax.plot(steps, areas)
 ax.set_xlabel('Step #')
@@ -51,6 +57,8 @@ ax2.set_ylabel('Error')
 fig, ax3 = plt.subplots()
 ax3.plot(np.log10(steps), np.log10(errors), color='red', label='Monte Carlo Results')
 ax3.plot(np.log10(steps), bf_line.slope * np.log10(steps) + bf_line.intercept, color='blue', label='Best Fit Line')
+ax3.plot(np.log10(steps), np.log10(errors[0])-0.5*np.log10(steps), color='orange', label='Better Best Fit Line')
 ax3.set_xlabel('Step # (log base 10)')
 ax3.set_ylabel('Error (log base 10)')
+ax3.legend(loc='upper right')
 plt.show()
